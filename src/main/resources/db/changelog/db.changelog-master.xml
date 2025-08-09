@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+            http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="create_table_items_08-08-2025" author="rumiantsava_veronika">
+        <createTable tableName="items">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"
+                             nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="DECIMAL(10,2)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="items"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create_table_orders_08-08-2025" author="rumiantsava_veronika">
+        <createTable tableName="orders">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"
+                             nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="orders"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create_table_order_items_08-08-2025" author="rumiantsava_veronika">
+        <createTable tableName="order_items">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="order_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="item_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="order_items"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="fk_order_items_order_id_08-08-2025" author="rumiantsava_veronika">
+        <addForeignKeyConstraint
+                baseTableName="order_items"
+                baseColumnNames="order_id"
+                referencedTableName="orders"
+                referencedColumnNames="id"
+                constraintName="fk_order_items_orders"
+                onDelete="CASCADE"/>
+        <rollback>
+            <dropForeignKeyConstraint
+                    baseTableName="order_items"
+                    constraintName="fk_order_items_orders"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="fk_order_items_item_id_08-08-2025" author="rumiantsava_veronika">
+        <addForeignKeyConstraint
+                baseTableName="order_items"
+                baseColumnNames="item_id"
+                referencedTableName="items"
+                referencedColumnNames="id"
+                constraintName="fk_order_items_items"/>
+        <rollback>
+            <dropForeignKeyConstraint
+                    baseTableName="order_items"
+                    constraintName="fk_order_items_items"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="index_orders_user_id_08-08-2025" author="rumiantsava_veronika">
+        <createIndex indexName="idx_orders_user_id" tableName="orders">
+            <column name="user_id"/>
+        </createIndex>
+        <rollback>
+            <dropIndex indexName="idx_orders_user_id" tableName="orders"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="index_orders_creation_date_08-08-2025" author="rumiantsava_veronika">
+        <createIndex indexName="idx_orders_creation_date" tableName="orders">
+            <column name="creation_date"/>
+        </createIndex>
+        <rollback>
+            <dropIndex indexName="idx_orders_creation_date" tableName="orders"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="index_order_items_order_id_08-08-2025" author="rumiantsava_veronika">
+        <createIndex indexName="idx_order_items_order_id" tableName="order_items">
+            <column name="order_id"/>
+        </createIndex>
+        <rollback>
+            <dropIndex indexName="idx_order_items_order_id" tableName="order_items"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="index_order_items_item_id_08-08-2025" author="rumiantsava_veronika">
+        <createIndex indexName="idx_order_items_item_id" tableName="order_items">
+            <column name="item_id"/>
+        </createIndex>
+        <rollback>
+            <dropIndex indexName="idx_order_items_item_id" tableName="order_items"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
