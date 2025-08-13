@@ -1,13 +1,16 @@
 package org.innowise.internship.orderservice.dto.item;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 
+@Getter
+@Setter
 public class ItemFullDTO {
-    private Long id;
-
     private String name;
 
     private BigDecimal price;
 
-    // Getters and Setters
+    private int quantity;
 }
