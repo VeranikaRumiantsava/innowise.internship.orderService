@@ -1,0 +1,33 @@
+services:
+  app:
+    image: order_service:latest
+    build: .
+    ports:
+      - "8081:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: rumronya
+      DB_PASSWORD: password
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: orders
+      POSTGRES_USER: rumronya
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U rumronya" ]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+volumes:
+  pgdata:
