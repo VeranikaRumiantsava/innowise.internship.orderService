@@ -1,5 +1,5 @@
 services:
-  app:
+  orderservice:
     image: order_service:latest
     build: .
     ports:
