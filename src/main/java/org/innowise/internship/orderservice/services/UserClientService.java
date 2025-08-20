@@ -14,8 +14,8 @@ public class UserClientService {
 
     public UserResponseDTO getUserById(Long userId, String token) {
         return webClient.get()
-                .uri("/users/{id}", userId)
-                .header("Authorization", token)
+                .uri("/user/{id}", userId)
+                .header("Authorization", "Bearer " + token)
                 .retrieve()
                 .bodyToMono(UserResponseDTO.class)
                 .block();

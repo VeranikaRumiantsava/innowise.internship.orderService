@@ -5,14 +5,20 @@ import lombok.RequiredArgsConstructor;
 import org.innowise.internship.orderservice.dto.order.OrderCreateDTO;
 import org.innowise.internship.orderservice.dto.order.OrderFullDTO;
 import org.innowise.internship.orderservice.dto.order.OrderUpdateDTO;
+import org.innowise.internship.orderservice.dto.orderitem.OrderItemRequestDTO;
 import org.innowise.internship.orderservice.dto.user.UserResponseDTO;
+import org.innowise.internship.orderservice.entities.Item;
 import org.innowise.internship.orderservice.entities.Order;
 
+import org.innowise.internship.orderservice.entities.OrderItem;
 import org.innowise.internship.orderservice.jwt.JwtUtil;
 import org.innowise.internship.orderservice.mappers.OrderMapper;
+import org.innowise.internship.orderservice.repositories.ItemRepository;
+import org.innowise.internship.orderservice.repositories.OrderItemRepository;
 import org.innowise.internship.orderservice.repositories.OrderRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,11 +31,27 @@ public class OrderService {
 
     private final OrderMapper orderMapper;
 
+    private final ItemRepository itemRepository;
+
+    private final OrderItemRepository orderItemRepository;
 
     public OrderFullDTO createOrder(OrderCreateDTO orderCreateDTO, Long userId) {
 
         Order order = orderMapper.orderCreateDTOtoOrder(orderCreateDTO);
         order.setUserId(userId);
+        //Order savedOrder = orderRepository.save(order);
+
+        for (OrderItemRequestDTO orderItemRequestDTO : orderCreateDTO.getOrderItems()) {
+            Item item = itemRepository.findById(orderItemRequestDTO.getItemId())
+                    .orElseThrow(() -> new RuntimeException("Item not found: " + orderItemRequestDTO.getItemId()));
+
+            OrderItem orderItem = new OrderItem();
+            orderItem.setOrder(order);
+            orderItem.setItem(item);
+            orderItem.setQuantity(orderItemRequestDTO.getQuantity());
+
+            order.getOrderItems().add(orderItem);
+        }
 
         Order savedOrder = orderRepository.save(order);
 
@@ -45,19 +67,25 @@ public class OrderService {
     @Transactional
     public OrderFullDTO updateOrder(Long orderId, OrderUpdateDTO orderUpdateDTO, Long userId) {
 
-        Optional<Order> currentOrder = orderRepository.findById(orderId);
+        Order currentOrder = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order doesn't exist"));
 
-        if (currentOrder.isEmpty()) {
-            throw new RuntimeException("Order doesn't exists");
-        }
-
-        if (!currentOrder.get().getUserId().equals(userId)) {
+        if (!currentOrder.getUserId().equals(userId)) {
             throw new RuntimeException("This order isn't current user");
         }
 
-        orderMapper.updateOrderFromOrderUpdateDTO(orderUpdateDTO, currentOrder.get());
+        orderMapper.updateOrderFromOrderUpdateDTO(orderUpdateDTO, currentOrder);
 
-        Order savedOrder = orderRepository.save(currentOrder.get());
+        if (orderUpdateDTO.getOrderItems() != null) {
+            for (OrderItemRequestDTO dto : orderUpdateDTO.getOrderItems()) {
+                Item item = itemRepository.findById(dto.getItemId())
+                        .orElseThrow(() -> new RuntimeException("Item not found: " + dto.getItemId()));
+                currentOrder.addOrUpdateOrderItem(dto, item); // метод в сущности
+            }
+        }
+
+
+        Order savedOrder = orderRepository.save(currentOrder);
 
         OrderFullDTO orderFullDTO = orderMapper.orderToOrderFullDTO(savedOrder);
 
