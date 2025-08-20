@@ -12,7 +12,6 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring",
-        uses = { OrderItemMapper.class, ItemMapper.class },
         imports = { java.time.LocalDateTime.class })
 public interface OrderMapper {
 
