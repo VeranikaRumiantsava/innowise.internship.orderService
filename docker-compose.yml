@@ -3,17 +3,20 @@ services:
     image: order_service:latest
     build: .
     ports:
-      - "8081:8080"
+      - "8082:8080"
     depends_on:
-      postgres:
+      postgres_orderservice:
         condition: service_healthy
     environment:
-      DB_HOST: postgres
+      DB_HOST: postgres_orderservice
       DB_PORT: 5432
       DB_USER: rumronya
       DB_PASSWORD: password
+      DB_NAME: orders
+    networks:
+      - app_network
 
-  postgres:
+  postgres_orderservice:
     image: postgres:15
     environment:
       POSTGRES_DB: orders
@@ -22,12 +25,18 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata_orderservice:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U rumronya" ]
+      test: ["CMD-SHELL", "pg_isready -U rumronya -d orders"]
       interval: 5s
       timeout: 3s
-      retries: 3
+      retries: 5
+    networks:
+      - app_network
 
 volumes:
-  pgdata:
+  pgdata_orderservice:
+
+networks:
+  app_network:
+    external: true
