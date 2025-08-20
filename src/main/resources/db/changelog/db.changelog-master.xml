@@ -129,5 +129,73 @@
             <dropIndex indexName="idx_order_items_item_id" tableName="order_items"/>
         </rollback>
     </changeSet>
+    
+    <changeSet id="insert_random_harry_potter_items_08-20-2025" author="rumiantsava_veronika">
+        <insert tableName="items">
+            <column name="name" value="Harry's Wand"/>
+            <column name="price" value="299.99"/>
+        </insert>
+        <insert tableName="items">
+            <column name="name" value="Invisibility Cloak"/>
+            <column name="price" value="499.50"/>
+        </insert>
+        <insert tableName="items">
+            <column name="name" value="Marauder's Map"/>
+            <column name="price" value="150.00"/>
+        </insert>
+        <insert tableName="items">
+            <column name="name" value="Quidditch Ball (Quaffle)"/>
+            <column name="price" value="25.75"/>
+        </insert>
+        <insert tableName="items">
+            <column name="name" value="Love Potion"/>
+            <column name="price" value="99.90"/>
+        </insert>
+        <insert tableName="items">
+            <column name="name" value="Sorting Hat"/>
+            <column name="price" value="200.00"/>
+        </insert>
+        <insert tableName="items">
+            <column name="name" value="Hogwarts Map"/>
+            <column name="price" value="75.30"/>
+        </insert>
+        <insert tableName="items">
+            <column name="name" value="Feather Quill Pen"/>
+            <column name="price" value="15.00"/>
+        </insert>
+        <insert tableName="items">
+            <column name="name" value="Crystal Ball"/>
+            <column name="price" value="120.00"/>
+        </insert>
+        <insert tableName="items">
+            <column name="name" value="Howler Letter"/>
+            <column name="price" value="50.00"/>
+        </insert>
+        <insert tableName="items">
+            <column name="name" value="Golden Snitch"/>
+            <column name="price" value="300.00"/>
+        </insert>
+        <insert tableName="items">
+            <column name="name" value="Slytherin Locket (Replica)"/>
+            <column name="price" value="80.00"/>
+        </insert>
+        <insert tableName="items">
+            <column name="name" value="Dark Arts Grimoire"/>
+            <column name="price" value="250.00"/>
+        </insert>
+        <insert tableName="items">
+            <column name="name" value="Chocolate Frog"/>
+            <column name="price" value="5.50"/>
+        </insert>
+        <insert tableName="items">
+            <column name="name" value="Beginner's Spellbook"/>
+            <column name="price" value="60.00"/>
+        </insert>
+
+        <rollback>
+            <delete tableName="items"/>
+        </rollback>
+    </changeSet>
+
 
 </databaseChangeLog>
