@@ -16,7 +16,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 public interface OrderMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "status", expression = "java(\"NEW\")")
+    @Mapping(target = "status", expression = "java(org.innowise.internship.orderservice.entities.OrderStatus.NEW)")
     @Mapping(target = "creationDate", expression = "java(LocalDateTime.now())")
     @Mapping(target = "userId", ignore = true)
     @Mapping(target = "orderItems", expression = "java(new java.util.ArrayList<>())")

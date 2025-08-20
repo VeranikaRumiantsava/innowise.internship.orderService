@@ -11,6 +11,7 @@ import org.innowise.internship.orderservice.entities.Item;
 import org.innowise.internship.orderservice.entities.Order;
 
 import org.innowise.internship.orderservice.entities.OrderItem;
+import org.innowise.internship.orderservice.entities.OrderStatus;
 import org.innowise.internship.orderservice.exceptions.ItemNotFoundException;
 import org.innowise.internship.orderservice.exceptions.OrderNotFoundException;
 import org.innowise.internship.orderservice.mappers.OrderMapper;
@@ -115,7 +116,7 @@ public class OrderService {
                 .toList();
     }
 
-    public List<OrderFullDTO> getByStatus(String status, Long userId) {
+    public List<OrderFullDTO> getByStatus(OrderStatus status, Long userId) {
         List<Order> listOrder = orderRepository.findByStatusAndUserId(status, userId);
 
         UserResponseDTO userResponseDTO = userClientService.getUserById(userId);

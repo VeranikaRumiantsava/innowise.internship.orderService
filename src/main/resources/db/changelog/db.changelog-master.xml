@@ -197,5 +197,22 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="update_existing_orders_status_to_new_08-20-2025" author="rumiantsava_veronika">
+        <update tableName="orders">
+            <column name="status" value="NEW"/>
+            <where>status IS NOT NULL</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="order_status_check_sql_08-20-2025" author="rumiantsava_veronika">
+        <sql>
+            ALTER TABLE orders
+                ADD CONSTRAINT chk_orders_status
+                    CHECK (status IN ('NEW','PROCESSING','SHIPPED','DELIVERED','CANCELLED','RETURNED','FAILED'));
+        </sql>
+        <rollback>
+            <sql>ALTER TABLE orders DROP CONSTRAINT chk_orders_status;</sql>
+        </rollback>
+    </changeSet>
 
 </databaseChangeLog>

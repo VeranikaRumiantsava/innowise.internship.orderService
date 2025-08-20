@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.innowise.internship.orderservice.dto.orderitem.OrderItemFullDTO;
 import org.innowise.internship.orderservice.dto.user.UserResponseDTO;
+import org.innowise.internship.orderservice.entities.OrderStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,7 +16,7 @@ public class OrderFullDTO {
 
     private Long id;
 
-    private String status;
+    private OrderStatus status;
 
     private LocalDateTime creationDate;
 
