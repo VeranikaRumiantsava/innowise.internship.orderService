@@ -12,7 +12,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring",
-        imports = { java.time.LocalDateTime.class })
+        imports = {java.time.LocalDateTime.class})
 public interface OrderMapper {
 
     @Mapping(target = "id", ignore = true)
@@ -22,15 +22,8 @@ public interface OrderMapper {
     @Mapping(target = "orderItems", expression = "java(new java.util.ArrayList<>())")
     Order orderCreateDTOtoOrder(OrderCreateDTO orderCreateDTO);
 
-
     @Mapping(target = "user", ignore = true)
     OrderFullDTO orderToOrderFullDTO(Order order);
-
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "userId", ignore = true)
-    @Mapping(target = "creationDate", ignore = true)
-
-    Order orderUpdateDTOtoOrder(OrderUpdateDTO orderUpdateDTO);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "userId", ignore = true)
@@ -38,5 +31,4 @@ public interface OrderMapper {
     @Mapping(target = "orderItems", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateOrderFromOrderUpdateDTO(OrderUpdateDTO userUpdateDTO, @MappingTarget Order order);
-
 }

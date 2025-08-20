@@ -13,27 +13,25 @@ import org.innowise.internship.orderservice.entities.Order;
 import org.innowise.internship.orderservice.entities.OrderItem;
 import org.innowise.internship.orderservice.exceptions.ItemNotFoundException;
 import org.innowise.internship.orderservice.exceptions.OrderNotFoundException;
-import org.innowise.internship.orderservice.jwt.JwtUtil;
 import org.innowise.internship.orderservice.mappers.OrderMapper;
 import org.innowise.internship.orderservice.repositories.ItemRepository;
 import org.innowise.internship.orderservice.repositories.OrderRepository;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class OrderService {
-    private final OrderRepository orderRepository;
-    private final UserClientService userClientService;
-    private final JwtUtil jwtUtil;
-
-    private final OrderMapper orderMapper;
 
     private final ItemRepository itemRepository;
+
+    private final OrderRepository orderRepository;
+    private final OrderMapper orderMapper;
+
+    private final UserClientService userClientService;
+
 
     public OrderFullDTO createOrder(OrderCreateDTO orderCreateDTO, Long userId) {
 

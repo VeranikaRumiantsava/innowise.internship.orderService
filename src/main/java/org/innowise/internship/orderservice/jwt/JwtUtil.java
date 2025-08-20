@@ -15,8 +15,8 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private final long EXPIRATION_TIME = 1000 * 60 * 15; // 15 минут
-    private final long REFRESH_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 7; // 7 дней
+    private final long EXPIRATION_TIME = 1000 * 60 * 15;
+    private final long REFRESH_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 7;
 
     @Value("${jwt.secret}")
     private String jwtSecret;

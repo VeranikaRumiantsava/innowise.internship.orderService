@@ -37,20 +37,20 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    public void addOrUpdateOrderItem(OrderItemRequestDTO dto, Item item) {
+    public void addOrUpdateOrderItem(OrderItemRequestDTO orderItemRequestDTO, Item item) {
         OrderItem existing = orderItems.stream()
-                .filter(oi -> oi.getItem().getId().equals(dto.getItemId()))
+                .filter(orderItem -> orderItem.getItem().getId().equals(orderItemRequestDTO.getItemId()))
                 .findFirst()
                 .orElse(null);
 
         if (existing != null) {
-            existing.setQuantity(dto.getQuantity());
+            existing.setQuantity(orderItemRequestDTO.getQuantity());
         } else {
-            OrderItem newItem = new OrderItem();
-            newItem.setItem(item);
-            newItem.setQuantity(dto.getQuantity());
-            newItem.setOrder(this);
-            orderItems.add(newItem);
+            OrderItem newOrderItem = new OrderItem();
+            newOrderItem.setItem(item);
+            newOrderItem.setQuantity(orderItemRequestDTO.getQuantity());
+            newOrderItem.setOrder(this);
+            orderItems.add(newOrderItem);
         }
     }
 }

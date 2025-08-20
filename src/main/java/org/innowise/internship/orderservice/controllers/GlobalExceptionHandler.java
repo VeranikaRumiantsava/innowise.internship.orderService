@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
                 .toList();
 
 
-        return buildErrorResponse (
+        return buildErrorResponse(
                 errors,
                 HttpStatus.BAD_REQUEST,
                 "Bad request"
@@ -51,7 +51,7 @@ public class GlobalExceptionHandler {
                 .map(fieldError -> fieldError.getPropertyPath() + ": " + fieldError.getMessage())
                 .toList();
 
-        return buildErrorResponse (
+        return buildErrorResponse(
                 errors,
                 HttpStatus.BAD_REQUEST,
                 "Bad request"
