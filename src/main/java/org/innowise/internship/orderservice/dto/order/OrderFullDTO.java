@@ -11,9 +11,9 @@ import java.util.List;
 @Getter
 @Setter
 public class OrderFullDTO {
-    private Long id;
+    private UserResponseDTO user;
 
-    private Long userId;
+    private Long id;
 
     private String status;
 
@@ -21,5 +21,5 @@ public class OrderFullDTO {
 
     private List<OrderItemFullDTO> orderItems;
 
-    private UserResponseDTO user;
+
 }

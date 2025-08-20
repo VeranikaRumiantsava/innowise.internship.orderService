@@ -11,6 +11,4 @@ public class ItemFullDTO {
     private String name;
 
     private BigDecimal price;
-
-    private int quantity;
 }

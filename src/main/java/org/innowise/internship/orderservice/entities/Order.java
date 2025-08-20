@@ -10,8 +10,10 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import org.innowise.internship.orderservice.dto.orderitem.OrderItemRequestDTO;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -33,5 +35,22 @@ public class Order {
     private LocalDateTime creationDate;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItem> orderItems;
+    private List<OrderItem> orderItems = new ArrayList<>();
+
+    public void addOrUpdateOrderItem(OrderItemRequestDTO dto, Item item) {
+        OrderItem existing = orderItems.stream()
+                .filter(oi -> oi.getItem().getId().equals(dto.getItemId()))
+                .findFirst()
+                .orElse(null);
+
+        if (existing != null) {
+            existing.setQuantity(dto.getQuantity());
+        } else {
+            OrderItem newItem = new OrderItem();
+            newItem.setItem(item);
+            newItem.setQuantity(dto.getQuantity());
+            newItem.setOrder(this);
+            orderItems.add(newItem);
+        }
+    }
 }

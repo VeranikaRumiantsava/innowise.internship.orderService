@@ -15,6 +15,6 @@ import java.util.List;
 @Getter
 public class OrderCreateDTO {
    @NotNull(message = "Order items are required")
-    @Size(min = 1, message = "At least one order item is required")
-    private List<OrderItemRequestDTO> orderItems;
+   @Size(min = 1, message = "At least one order item is required")
+   private List<OrderItemRequestDTO> orderItems;
 }

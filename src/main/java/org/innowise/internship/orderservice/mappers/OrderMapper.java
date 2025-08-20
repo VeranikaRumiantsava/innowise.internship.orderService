@@ -11,15 +11,16 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-import java.time.LocalDateTime;
-
-@Mapper(componentModel = "spring", uses = { OrderItemMapper.class, ItemMapper.class })
+@Mapper(componentModel = "spring",
+        uses = { OrderItemMapper.class, ItemMapper.class },
+        imports = { java.time.LocalDateTime.class })
 public interface OrderMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "status", defaultValue = "NEW")
+    @Mapping(target = "status", expression = "java(\"NEW\")")
     @Mapping(target = "creationDate", expression = "java(LocalDateTime.now())")
     @Mapping(target = "userId", ignore = true)
+    @Mapping(target = "orderItems", expression = "java(new java.util.ArrayList<>())")
     Order orderCreateDTOtoOrder(OrderCreateDTO orderCreateDTO);
 
 
@@ -29,11 +30,13 @@ public interface OrderMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "userId", ignore = true)
     @Mapping(target = "creationDate", ignore = true)
+
     Order orderUpdateDTOtoOrder(OrderUpdateDTO orderUpdateDTO);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "userId", ignore = true)
     @Mapping(target = "creationDate", ignore = true)
+    @Mapping(target = "orderItems", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateOrderFromOrderUpdateDTO(OrderUpdateDTO userUpdateDTO, @MappingTarget Order order);
 
