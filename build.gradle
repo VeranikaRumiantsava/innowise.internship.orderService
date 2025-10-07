@@ -49,8 +49,42 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+
+	testImplementation 'org.testcontainers:testcontainers:1.19.1'
+	testImplementation 'org.testcontainers:junit-jupiter:1.19.1'
+	testImplementation 'org.testcontainers:postgresql:1.19.1'
+
+	testImplementation 'com.github.tomakehurst:wiremock-jre8:2.35.0'
+	testImplementation 'org.wiremock.integrations.testcontainers:wiremock-testcontainers-module:1.0-alpha-13'
+
+	implementation 'org.springframework.kafka:spring-kafka'
 }
 
 tasks.named('test') {
+	useJUnitPlatform()
+}
+
+sourceSets {
+	integrationTest {
+		java {
+			srcDir 'src/integrationTest/java'
+		}
+		resources.srcDir 'src/integrationTest/resources'
+		compileClasspath += sourceSets.main.output + configurations.testRuntimeClasspath
+		runtimeClasspath += output + compileClasspath
+	}
+}
+
+configurations {
+	integrationTestImplementation.extendsFrom testImplementation
+	integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
+}
+
+tasks.register('integrationTest', Test) {
+	description = 'Runs integration tests.'
+	group = 'verification'
+	testClassesDirs = sourceSets.integrationTest.output.classesDirs
+	classpath = sourceSets.integrationTest.runtimeClasspath
+	shouldRunAfter test
 	useJUnitPlatform()
 }

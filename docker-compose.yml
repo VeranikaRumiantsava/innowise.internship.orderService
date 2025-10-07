@@ -16,6 +16,7 @@ services:
     networks:
       - app_network
 
+
   postgres_orderservice:
     image: postgres:15
     environment:
