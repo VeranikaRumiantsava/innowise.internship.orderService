@@ -21,6 +21,4 @@ public class OrderFullDTO {
     private LocalDateTime creationDate;
 
     private List<OrderItemFullDTO> orderItems;
-
-
 }

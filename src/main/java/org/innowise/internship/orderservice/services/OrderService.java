@@ -2,6 +2,7 @@ package org.innowise.internship.orderservice.services;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.innowise.internship.orderservice.dto.kafka.OrderDTO;
 import org.innowise.internship.orderservice.dto.order.OrderCreateDTO;
 import org.innowise.internship.orderservice.dto.order.OrderFullDTO;
 import org.innowise.internship.orderservice.dto.order.OrderUpdateDTO;
@@ -14,12 +15,14 @@ import org.innowise.internship.orderservice.entities.OrderItem;
 import org.innowise.internship.orderservice.entities.OrderStatus;
 import org.innowise.internship.orderservice.exceptions.ItemNotFoundException;
 import org.innowise.internship.orderservice.exceptions.OrderNotFoundException;
+import org.innowise.internship.orderservice.kafka.producers.OrderKafkaProducer;
 import org.innowise.internship.orderservice.mappers.OrderMapper;
 import org.innowise.internship.orderservice.repositories.ItemRepository;
 import org.innowise.internship.orderservice.repositories.OrderRepository;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -30,6 +33,7 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
+    private final OrderKafkaProducer orderKafkaProducer;
 
     private final UserClientService userClientService;
 
@@ -55,6 +59,15 @@ public class OrderService {
 
         OrderFullDTO orderFullDTO = orderMapper.orderToOrderFullDTO(savedOrder);
         orderFullDTO.setUser(userClientService.getUserById(userId));
+
+        // ====== Отправка события CREATE_ORDER ======
+        OrderDTO orderDTO = new OrderDTO();
+        orderDTO.setOrderId(savedOrder.getId());
+        orderDTO.setUserId(userId);
+        orderDTO.setAmount(BigDecimal.valueOf(100.0)); // сумма заказа, если есть поле
+        orderKafkaProducer.sendCreateOrder(orderDTO);
+        // ============================================
+
 
         return orderFullDTO;
     }
